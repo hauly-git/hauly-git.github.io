@@ -1,0 +1,183 @@
+@keyframes slide-fade-in {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 全体の基本設定 */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* メインビジュアルの背景 */
+.main-visual {
+  /* 既存のスタイル */
+  background-image: url("/VRC/image/main_visual.png");
+  background-size: cover;
+  background-position: absolute;
+  height: 100vh;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+  animation: slide-fade-in 2s ease;
+}
+
+main{
+    background-color: #ffd391;
+}
+
+/* ヘッダーの基本スタイル (PC向け) */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(56, 56, 56, 0.4);
+    z-index: 10;
+    padding: 20px 0;
+    color: #fff;
+}
+.header-content {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.title{
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px #000000;
+}
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+nav a:hover {
+    color: #ddd;
+}
+
+/* 自己紹介セクション */
+.about-container {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.profile-image {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.about-text {
+    flex-grow: 1;
+}
+#about h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+#about p {
+    line-height: 1.6;
+}
+
+/* 写真ギャラリー */
+.photo-gallery {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 15px; 
+    justify-content: center; 
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.photo-item {
+    width: 300px;
+    overflow: hidden; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease; 
+}
+.photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+.photo-item:hover {
+    transform: scale(1.05); 
+}
+
+/* スマホ向けメディアクエリ */
+@media (max-width: 768px) {
+    /* ヘッダー */
+    .header-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding-top: 10px;
+    }
+    .title-left {
+        font-size: 30px; 
+    }
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 15px;
+        gap: 10px;
+    }
+    nav a {
+        font-size: 0.9rem;
+    }
+
+    /* 自己紹介セクション */
+    .about-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .profile-image {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 20px;
+    }
+    .about-text {
+        width: 100%;
+    }
+
+    /* 写真ギャラリー */
+    .photo-item {
+        width: 100%;
+        height: auto;
+    }
+    .photo-item img {
+        object-fit: contain;
+    }
+}
+.booth-shop a{
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+.booth-shop:hover {
+    transform: scale(1.05); 
+}
