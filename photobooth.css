@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-/* --- 共通スタイル (トップページと同じ) --- */
+/* --- 共通スタイル --- */
 :root {
     --primary-color: #333;
     --accent-color: #5d9cec;
@@ -17,17 +17,8 @@ body {
     line-height: 1.8;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
-    transition: 0.3s;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+a { text-decoration: none; color: inherit; transition: 0.3s; }
+ul { list-style: none; padding: 0; margin: 0; }
 
 /* --- ヘッダー --- */
 .site-header {
@@ -36,8 +27,8 @@ ul {
     width: 100%;
     padding: 15px 40px;
     box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.8); /* 少し透明度アップ */
+    backdrop-filter: blur(15px); /* ぼかしを強く */
     z-index: 1000;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
@@ -50,65 +41,49 @@ ul {
     margin: 0 auto;
 }
 
-.title span {
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: var(--primary-color);
-}
-
-nav ul {
-    display: flex;
-    gap: 30px;
-}
-
-nav a {
-    font-weight: 500;
-    font-size: 0.9rem;
-}
-
-nav a:hover {
-    color: var(--accent-color);
-}
+.title span { font-weight: 700; font-size: 1.2rem; color: var(--primary-color); }
+nav ul { display: flex; gap: 30px; }
+nav a { font-weight: 500; font-size: 0.9rem; }
+nav a:hover { color: var(--accent-color); }
 
 /* --- メインコンテンツ --- */
 .main-content {
-    padding-top: 80px; /* ヘッダーの高さ分空ける */
+    padding-top: 80px; 
 }
 
-/* --- スライドショーエリアの調整 --- */
+/* --- スライドショー --- */
 .slideshow {
     width: 100%;
-    height: 60vh; /* 高さ調整 */
+    height: 60vh; 
     position: relative;
     overflow: hidden;
-    background: #000; /* 画像がない部分の背景 */
-    margin-bottom: 50px;
+    background: #000;
+    margin-bottom: 80px; /* 余白を広めに */
 }
 
-/* slideshow.js用の最低限のスタイル補完 */
+/* スライド画像 */
 .slide {
     position: absolute;
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity 1s;
+    transition: opacity 1.5s ease-in-out; /* ふわっと感を強化 */
 }
 
-.slide.is-active {
-    opacity: 1;
-    z-index: 1;
-}
-
-.image-container {
-    width: 100%;
-    height: 100%;
-}
+.slide.is-active { opacity: 1; z-index: 1; }
 
 .image-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.7;
+    opacity: 0.6; /* 写真を少し暗くして文字を目立たせる */
+    transform: scale(1.05); /* わずかに拡大 */
+    transition: transform 6s ease; /* ゆっくり動かす */
+}
+
+/* アクティブ時にゆっくりズームアウトする演出 */
+.slide.is-active .image-container img {
+    transform: scale(1);
 }
 
 .slide-content {
@@ -119,31 +94,30 @@ nav a:hover {
     z-index: 2;
     text-align: center;
     color: white;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    text-shadow: 0 4px 15px rgba(0,0,0,0.6);
 }
 
 .slide-content .title {
-    font-size: 2.5rem;
-    font-weight: bold;
+    font-size: 3rem;
+    font-weight: 700;
     margin-bottom: 20px;
     letter-spacing: 0.1em;
+    font-family: 'Oswald', sans-serif; /* 英字フォントがあれば */
 }
 
 .btn {
     display: inline-block;
-    padding: 10px 30px;
-    border: 1px solid white;
+    padding: 12px 35px;
+    border: 1px solid rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.1);
     color: white;
     border-radius: 50px;
     font-size: 0.9rem;
+    backdrop-filter: blur(5px);
 }
+.btn:hover { background: white; color: black; border-color: white; }
 
-.btn:hover {
-    background: white;
-    color: black;
-}
-
-/* 矢印ナビゲーション */
+/* 矢印 */
 .arrows .arrow {
     position: absolute;
     top: 50%;
@@ -151,18 +125,15 @@ nav a:hover {
     cursor: pointer;
     z-index: 10;
     padding: 20px;
-    fill: white;
+    fill: rgba(255,255,255,0.7);
+    transition: fill 0.3s;
 }
+.arrows .arrow:hover { fill: white; }
+.arrows .prev { left: 20px; }
+.arrows .next { right: 20px; }
 
-.arrows .prev {
-    left: 20px;
-}
 
-.arrows .next {
-    right: 20px;
-}
-
-/* --- ギャラリーセクション --- */
+/* --- ギャラリーセクション (Masonry Layout) --- */
 .photo-gallery-section {
     max-width: 1200px;
     margin: 0 auto;
@@ -172,63 +143,120 @@ nav a:hover {
 .section-title {
     text-align: center;
     font-size: 2.5rem;
-    margin-bottom: 10px;
+    margin-bottom: 60px;
     color: var(--primary-color);
+    letter-spacing: 0.1em;
 }
 
 h2 {
-    font-size: 1.5rem;
-    border-left: 5px solid var(--accent-color);
-    padding-left: 15px;
-    margin: 60px 0 30px;
+    font-size: 1.4rem;
+    text-align: center; /* 左寄せから中央寄せに変更 */
+    margin: 80px 0 40px;
     color: var(--primary-color);
+    position: relative;
+    display: inline-block;
+    width: 100%;
 }
 
-/* グリッドレイアウト */
+/* 見出しの装飾（直線のライン） */
+h2::before, h2::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30px;
+    height: 1px;
+    background-color: var(--accent-color);
+}
+h2::before { margin-left: -45px; } /* 左の線 */
+h2::after { margin-left: 15px; }   /* 右の線 */
+
+
+/* ピンタレスト風レイアウト (CSS Columns) */
 .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 自動折り返し */
-    gap: 15px;
+    column-count: 4; /* PCでは4列 */
+    column-gap: 20px; /* 列の隙間 */
 }
 
-/* 縦画像用の調整 */
+/* 縦画像用エリアの微調整 */
 .gallery-grid.vertical {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    column-count: 5; /* 縦長写真は細いので5列に増やす */
 }
 
 .gallery-item {
     display: block;
+    margin-bottom: 20px; /* 下の隙間 */
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     position: relative;
+    break-inside: avoid; /* 画像が列の途中で切れないようにする */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    background: #fff;
 }
 
 .gallery-item img {
     width: 100%;
-    height: 100%;
-    object-fit: cover; /* 枠に合わせてトリミング */
+    height: auto;
     display: block;
-    transition: transform 0.4s ease;
+    transition: transform 0.5s ease, filter 0.3s ease;
 }
 
-/* ホバー時のエフェクト */
-.gallery-item:hover img {
-    transform: scale(1.05);
-}
-
+/* --- ホバーエフェクト（おしゃれポイント） --- */
 .gallery-item::after {
+    /* 虫眼鏡アイコン（FontAwesomeのコード） */
+    content: '\f00e'; 
+    font-family: "Font Awesome 6 Free"; 
+    font-weight: 900;
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0); /* 最初は隠す */
+    
+    font-size: 2rem;
+    color: white;
+    z-index: 2;
+    transition: transform 0.3s ease;
+    pointer-events: none; /* クリックを邪魔しない */
+}
+
+.gallery-item::before {
+    /* 黒いフィルター */
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.1);
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.3);
     opacity: 0;
-    transition: 0.3s;
+    transition: opacity 0.3s;
+    z-index: 1;
+}
+
+/* ホバー時の動作 */
+.gallery-item:hover img {
+    transform: scale(1.1); /* 画像ズーム */
+}
+
+.gallery-item:hover::before {
+    opacity: 1; /* フィルター表示 */
 }
 
 .gallery-item:hover::after {
-    opacity: 1;
+    transform: translate(-50%, -50%) scale(1); /* アイコン出現 */
+}
+
+
+/* --- レスポンシブ対応 --- */
+@media (max-width: 1024px) {
+    .gallery-grid, .gallery-grid.vertical {
+        column-count: 3; /* タブレットは3列 */
+    }
+}
+
+@media (max-width: 768px) {
+    .gallery-grid, .gallery-grid.vertical {
+        column-count: 2; /* スマホは2列 */
+        column-gap: 10px;
+    }
+    .slide-content .title {
+        font-size: 2rem;
+    }
 }
