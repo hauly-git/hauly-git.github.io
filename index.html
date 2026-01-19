@@ -3,9 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <title>むめいよわよわ | Portfolio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <title>むめいよわよわ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ベーススタイル --- */
+        :root {
+            --primary-color: #333;
+            --accent-color: #5d9cec; /* 爽やかな青（好みに変更可） */
+            --bg-color: #f9f9f9;
+            --text-color: #444;
+        }
+
+        body {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            line-height: 1.8;
+            letter-spacing: 0.05em;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* --- ヘッダー（グラスモーフィズム） --- */
+        .site-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 40px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.7); /* 半透明の白 */
+            backdrop-filter: blur(10px); /* すりガラス効果 */
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .title span {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+        }
+
+        /* ナビゲーションの下線アニメーション */
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav i {
+            margin-right: 8px;
+        }
+
+        /* --- メインビジュアル --- */
+        .main-visual {
+            height: 60vh; /* 画面の60%の高さ */
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); /* 綺麗なグラデーション */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-bottom: 60px;
+        }
+        
+        /* 自分の好きな背景画像がある場合はこちらを使ってください
+        .main-visual {
+            background-image: url('image/header-bg.jpg'); 
+            background-size: cover;
+            background-position: center;
+        } */
+
+        .main-visual h1 {
+            color: white;
+            font-size: 3rem;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            letter-spacing: 0.2em;
+        }
+
+        /* --- コンテンツ共通設定 --- */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 100px;
+        }
+
+        section {
+            margin-bottom: 100px;
+            opacity: 0; /* アニメーション用 */
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section h2 {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary-color);
+        }
+
+        /* --- 自己紹介セクション --- */
+        .about-container {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%; /* 完全な丸 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .about-text .sentence span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .about-text p {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        /* --- 写真集セクション --- */
+        #photo-collection {
+            text-align: center;
+        }
+
+        .btn-link {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-link:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(93, 156, 236, 0.4);
+        }
+
+        /* --- Boothセクション --- */
+        #booth-shop {
+            text-align: center;
+        }
+
+        .booth-shop-to-link {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            font-weight: normal;
+        }
+
+        .booth-image {
+            max-width: 100%;
+            width: 400px;
+            border-radius: 15px;
+            transition: transform 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .booth-image:hover {
+            transform: scale(1.05); /* ホバーで少し拡大 */
+        }
+
+        /* --- スマホ対応（レスポンシブ） --- */
+        @media (max-width: 768px) {
+            .site-header {
+                padding: 15px 20px;
+            }
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .about-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .main-visual h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="site-header">
@@ -13,15 +249,17 @@
             <div class="title"><span>むめいよわよわ</span></div>
             <nav>
                 <ul>
-                    <li><a href="#about">自己紹介</a></li>
-                    <li><a href="#photo-collection"><i class="fa-solid fa-camera-alt"></i>撮った写真集</a></li>
-                    <li><a href="#booth-shop"><i class="fa-solid fa-store-alt"></i>boothショップ</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#photo-collection"><i class="fa-solid fa-camera-alt"></i>Photo</a></li>
+                    <li><a href="#booth-shop"><i class="fa-solid fa-store-alt"></i>Shop</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <div class="main-visual"></div>
+    <div class="main-visual">
+        <h1>Mumei Yowayowa</h1>
+    </div>
 
     <main>
         <section id="about">
@@ -31,22 +269,25 @@
                     <h2 class="sentence"><span>むめいよわよわ</span></h2>
                     <p>こんにちは！</p>
                     <p>むめいよわよわです。</p>
-                    <p>blenderで3Dモデリングをしたり、VRChatで遊んだりしています。</p>
-                    <p>最近はvrc内で写真を撮るので、撮った写真をこのサイトで紹介しています。</p>
+                    <p>Blenderで3Dモデリングをしたり、VRChatで遊んだりしています。</p>
+                    <p>最近はVRC内で写真を撮るので、撮った写真をこのサイトで紹介しています。</p>
                 </div>
             </div>
         </section>
+
         <section id="photo-collection">
             <h2>撮った写真集</h2>
-            <a href="photobooth.html">ここから見れます！</a>
+            <p style="margin-bottom: 30px;">VRChatの世界で撮影したお気に入りの一枚たちです。</p>
+            <a href="photobooth.html" class="btn-link">ギャラリーを見る <i class="fa-solid fa-arrow-right"></i></a>
         </section>
+
         <section id="booth-shop">
-            <h1 class="booth-shop-to-link">Boothリンクはこの画像をクリック</h1>
+            <h2>BOOTH SHOP</h2>
+            <p class="booth-shop-to-link">3Dモデルやアイテムはこちらで販売中</p>
             <a href="https://yowayowa-shop.booth.pm/">
-        <img src="image/boothicon.png" alt="boothショップへのリンク">
-    </a>
+                <img src="image/boothicon.png" alt="boothショップへのリンク" class="booth-image">
+            </a>
         </section>
     </main>
-
 </body>
 </html>

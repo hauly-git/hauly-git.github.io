@@ -3,214 +3,381 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="photobooth.css">
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="slideshow.js"></script>
-    <title>Document</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.css" rel="stylesheet">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js" defer type="text/javascript"></script>
+    <title>Photo Gallery | むめいよわよわ</title>
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+    <script src="slideshow.js"></script>
+
+    <style>
+        /* --- 共通スタイル (トップページと同じ) --- */
+        :root {
+            --primary-color: #333;
+            --accent-color: #5d9cec;
+            --bg-color: #f9f9f9;
+            --text-color: #444;
+        }
+
+        body {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            line-height: 1.8;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; padding: 0; margin: 0; }
+
+        /* --- ヘッダー --- */
+        .site-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 40px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .title span { font-weight: 700; font-size: 1.2rem; color: var(--primary-color); }
+        
+        nav ul { display: flex; gap: 30px; }
+        nav a { font-weight: 500; font-size: 0.9rem; }
+        nav a:hover { color: var(--accent-color); }
+
+        /* --- メインコンテンツ --- */
+        .main-content {
+            padding-top: 80px; /* ヘッダーの高さ分空ける */
+        }
+
+        /* --- スライドショーエリアの調整 --- */
+        .slideshow {
+            width: 100%;
+            height: 60vh; /* 高さ調整 */
+            position: relative;
+            overflow: hidden;
+            background: #000; /* 画像がない部分の背景 */
+            margin-bottom: 50px;
+        }
+        
+        /* slideshow.js用の最低限のスタイル補完 */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        .slide.is-active { opacity: 1; z-index: 1; }
+        
+        .image-container { width: 100%; height: 100%; }
+        .image-container img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+
+        .slide-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            text-align: center;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .slide-content .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 30px;
+            border: 1px solid white;
+            color: white;
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
+        .btn:hover { background: white; color: black; }
+
+        /* 矢印ナビゲーション */
+        .arrows .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            z-index: 10;
+            padding: 20px;
+            fill: white;
+        }
+        .arrows .prev { left: 20px; }
+        .arrows .next { right: 20px; }
+
+
+        /* --- ギャラリーセクション --- */
+        .photo-gallery-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 100px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+            margin: 60px 0 30px;
+            color: var(--primary-color);
+        }
+
+        /* グリッドレイアウト（ここが重要） */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 自動折り返し */
+            gap: 15px;
+        }
+
+        /* 縦画像用の調整（少し細長く表示させたい場合） */
+        .gallery-grid.vertical {
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        }
+
+        .gallery-item {
+            display: block;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 枠に合わせてトリミング */
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        /* ホバー時のエフェクト */
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.1);
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+    </style>
 </head>
 <body>
-        <header class="site-header">
+
+    <header class="site-header">
         <div class="header-content">
             <div class="title"><span>むめいよわよわ</span></div>
             <nav>
                 <ul>
-                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="index.html">Top Page</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main class="main-content">
-  <section class="slideshow">
-    <div class="slideshow-inner">
-      <div class="slides">
-        <div class="slide is-active ">
-          <div class="slide-content">
-            <div class="caption">
-              <div class="title">VRChat Vertical Photos</div>
-              <a href="#VRChat-photo" class="btn">
-                <span class="btn-inner">Look More</span>
-              </a>
-            </div>
-          </div>
-          <div class="image-container"> 
-            <img src="image/yoko_photo1.jpg" alt="" class="image" />
-          </div>
-        </div>
-        <div class="slide">
-          <div class="slide-content">
-            <div class="caption">
-              <div class="title">VRChat Photos</div>
-              <a href="#photo-gallery-yoko" class="btn">
-                <span class="btn-inner">Look More</span>
-              </a>
-            </div>
-          </div>
-          <div class="image-container">
-            <img src="image/yoko_photo2.png" alt="" class="image" />
-          </div>
-        </div>
-        <div class="slide">
-          <div class="slide-content">
-            <div class="caption">
-              <div class="title">VRChat Photos</div>
+        <section class="slideshow">
+            <div class="slideshow-inner">
+                <div class="slides">
+                    <div class="slide is-active">
+                        <div class="slide-content">
+                            <div class="caption">
+                                <div class="title">Vertical Collection</div>
+                                <a href="#VRChat-photo" class="btn">
+                                    <span class="btn-inner">View More</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="image-container"> 
+                            <img src="image/yoko_photo1.jpg" alt="">
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-content">
+                            <div class="caption">
+                                <div class="title">Landscape Collection</div>
+                                <a href="#photo-gallery-yoko" class="btn">
+                                    <span class="btn-inner">View More</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="image-container">
+                            <img src="image/yoko_photo2.png" alt="">
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-content">
+                            <div class="caption">
+                                <div class="title">Mumei Yowayowa</div>
+                                <a href="#" class="btn"><span class="btn-inner">Profile</span></a>
+                            </div>
+                        </div>
+                        <div class="image-container">
+                            <img src="image/profile.jpg" alt="">
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-content">
+                            <div class="caption">
+                                <div class="title">VRChat Life</div>
+                            </div>
+                        </div>
+                        <div class="image-container"> 
+                            <img src="image/main_visual.png" alt="">
+                        </div>
+                    </div>
+                </div>
                 
-              <a href="#" class="btn">
-                <span class="btn-inner">Look More</span>
-              </a>
+                <div class="arrows">
+                    <div class="arrow prev">
+                        <svg viewBox="0 0 14 26" width="14" height="26"><path d="M13,26c-0.256,0-0.512-0.098-0.707-0.293l-12-12c-0.391-0.391-0.391-1.023,0-1.414l12-12c0.391-0.391,1.023-0.391,1.414,0s0.391,1.023,0,1.414L2.414,13l11.293,11.293c0.391,0.391,0.391,1.023,0,1.414C13.512,25.902,13.256,26,13,26z"/></svg>
+                    </div>
+                    <div class="arrow next">
+                        <svg viewBox="0 0 14 26" width="14" height="26"><path d="M1,0c0.256,0,0.512,0.098,0.707,0.293l12,12c0.391,0.391,0.391,1.023,0,1.414l-12,12c-0.391,0.391-1.023,0.391-1.414,0s-0.391-1.023,0-1.414L11.586,13L0.293,1.707c-0.391-0.391-0.391-1.023,0-1.414C0.488,0.098,0.744,0,1,0z"/></svg>
+                    </div>
+                </div>
+            </div> 
+        </section>
+
+        <section class="photo-gallery-section" id="VRChat-photo">
+            <h1 class="section-title">Gallery</h1>
+            
+            <h2>縦画像 (Vertical)</h2>
+            <div id="photo-gallery" class="gallery-grid vertical">
+                <a href="image/tate_photo1.png" data-lightbox="vertical" class="gallery-item">
+                    <img src="image/tate_photo1.png" alt="VRC Photo">
+                </a>
+                <a href="image/tate_photo2.png" data-lightbox="vertical" class="gallery-item">
+                    <img src="image/tate_photo2.png" alt="VRC Photo">
+                </a>
+                <a href="image/tate_photo3.png" data-lightbox="vertical" class="gallery-item">
+                    <img src="image/tate_photo3.png" alt="VRC Photo">
+                </a>
+                <a href="image/tate_photo4.png" data-lightbox="vertical" class="gallery-item">
+                    <img src="image/tate_photo4.png" alt="VRC Photo">
+                </a>
+                <a href="image/tate_photo5.png" data-lightbox="vertical" class="gallery-item">
+                    <img src="image/tate_photo5.png" alt="VRC Photo">
+                </a>
+                <a href="image/tate_photo6.png" data-lightbox="vertical" class="gallery-item">
+                    <img src="image/tate_photo6.png" alt="VRC Photo">
+                </a>
+                <a href="image/tate_photo7.png" data-lightbox="vertical" class="gallery-item">
+                    <img src="image/tate_photo7.png" alt="VRC Photo">
+                </a>
+                <a href="image/tate_photo8.png" data-lightbox="vertical" class="gallery-item">
+                    <img src="image/tate_photo8.png" alt="VRC Photo">
+                </a>
             </div>
-          </div>
-          <div class="image-container">
-            <img src="image/profile.jpg" alt="" class="image" />
-          </div>
-        </div>
-        <div class="slide">
-          <div class="slide-content">
-            <div class="caption">
-              <div class="title">VRChat Photos</div>
-              <a href="#" class="btn">
-                <span class="btn-inner">Look More</span>
-              </a>
+
+            <h2>横画像 (Landscape)</h2>
+            <div id="photo-gallery-yoko" class="gallery-grid">
+                <a href="image/yoko_photo1.jpg" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo1.jpg" alt="VRC Photo"> 
+                </a>
+                <a href="image/yoko_photo2.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo2.png" alt="VRC Photo"> 
+                </a>
+                <a href="image/main_visual.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/main_visual.png" alt="VRC Photo"> 
+                </a>
+                <a href="image/yoko_photo3.jpg" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo3.jpg" alt="VRC Photo"> 
+                </a>
+                <a href="image/profile.jpg" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/profile.jpg" alt="VRC Photo"> 
+                </a>
+                <a href="image/yoko_photo4.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo4.png" alt="VRC Photo"> 
+                </a>
+                <a href="image/yoko_photo5.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo5.png" alt="VRC Photo"> 
+                </a>
+                <a href="image/yoko_photo6.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo6.png" alt="VRC Photo"> 
+                </a>
+                <a href="image/yoko_photo7.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo7.png" alt="VRC Photo">
+                </a>
+                <a href="image/yoko_photo8.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo8.png" alt="VRC Photo">
+                </a>
+                <a href="image/yoko_photo9.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo9.png" alt="VRC Photo">
+                </a>
+                <a href="image/yoko_photo10.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo10.png" alt="VRC Photo">
+                </a>
+                <a href="image/yoko_photo11.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo11.png" alt="VRC Photo">
+                </a>
+                <a href="image/yoko_photo12.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo12.png" alt="VRC Photo"> 
+                </a>
+                <a href="image/yoko_photo13.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo13.png" alt="VRC Photo">
+                </a>
+                <a href="image/yoko_photo14.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo14.png" alt="VRC Photo">
+                </a>
+                <a href="image/yoko_photo15.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo15.png" alt="VRC Photo">
+                </a>
+                <a href="image/yoko_photo16.png" data-lightbox="landscape" class="gallery-item">
+                    <img src="image/yoko_photo16.png" alt="VRC Photo">
+                </a>
             </div>
-          </div>
-          <div class="image-container"> 
-            <img src="image/main_visual.png" alt="" class="image" />
-          </div>
-        </div>
-      </div>
-      <div class="pagination">
-        <div class="item is-active"> 
-          <span class="icon">1</span>
-        </div>
-        <div class="item">
-          <span class="icon">2</span>
-        </div>
-        <div class="item">
-          <span class="icon">3</span>
-        </div>
-        <div class="item">
-          <span class="icon">4</span>
-        </div>
-      </div>
-      <div class="arrows">
-        <div class="arrow prev">
-          <span class="svg svg-arrow-left">
-            <svg version="1.1" id="svg4-Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="14px" height="26px" viewBox="0 0 14 26" enable-background="new 0 0 14 26" xml:space="preserve"> <path d="M13,26c-0.256,0-0.512-0.098-0.707-0.293l-12-12c-0.391-0.391-0.391-1.023,0-1.414l12-12c0.391-0.391,1.023-0.391,1.414,0s0.391,1.023,0,1.414L2.414,13l11.293,11.293c0.391,0.391,0.391,1.023,0,1.414C13.512,25.902,13.256,26,13,26z"/> </svg>
-            <span class="alt sr-only"></span>
-          </span>
-        </div>
-        <div class="arrow next">
-          <span class="svg svg-arrow-right">
-            <svg version="1.1" id="svg5-Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="14px" height="26px" viewBox="0 0 14 26" enable-background="new 0 0 14 26" xml:space="preserve"> <path d="M1,0c0.256,0,0.512,0.098,0.707,0.293l12,12c0.391,0.391,0.391,1.023,0,1.414l-12,12c-0.391,0.391-1.023,0.391-1.414,0s-0.391-1.023,0-1.414L11.586,13L0.293,1.707c-0.391-0.391-0.391-1.023,0-1.414C0.488,0.098,0.744,0,1,0z"/> </svg>
-            <span class="alt sr-only"></span>
-          </span>
-        </div>
-      </div>
-    </div> 
-  </section>
-  <section class="photo-gallery-section" id="VRChat-photo">
-    <h1 class="section-title">VRChat Photos</h1>
-    <h2>縦画像</h2>
-    <div id="photo-gallery">
-        
-        <a href="image/tate_photo1.png" data-lightbox="group">
-            <img src="image/tate_photo1.png" alt="VRChat Photo 1" width="300">
-        </a>
+        </section>
+    </main>
 
-        <a href="image/tate_photo2.png" data-lightbox="group">
-            <img src="image/tate_photo2.png" alt="VRChat Photo 2" width="300">
-        </a>
-
-        <a href="image/tate_photo3.png" data-lightbox="group">
-            <img src="image/tate_photo3.png" alt="VRChat Photo 3" width="300">
-        </a>
-        <a href="image/tate_photo4.png" data-lightbox="group">
-            <img src="image/tate_photo4.png" alt="VRChat Photo tate4" width="300">
-        </a>
-        <a href="image/tate_photo5.png" data-lightbox="group">
-            <img src="image/tate_photo5.png" alt="VRChat Photo tate4" width="300">
-        </a>
-        <a href="image/tate_photo6.png" data-lightbox="group">
-            <img src="image/tate_photo6.png" alt="VRChat Photo tate4" width="300">
-        </a>
-        <a href="image/tate_photo7.png" data-lightbox="group">
-            <img src="image/tate_photo7.png" alt="VRChat Photo tate4" width="300">
-        </a>
-        <a href="image/tate_photo8.png" data-lightbox="group">
-            <img src="image/tate_photo8.png" alt="VRChat Photo tate4" width="300">
-        </a>
-    </div>
-    <h2>横画面</h2>
-    <div id="photo-gallery-yoko">
-        <a href="image/yoko_photo1.jpg" data-lightbox="group">
-            <img src="image/yoko_photo1.jpg" alt="VRChat Photo 4" width="300"> 
-        </a>
-        <a href="image/yoko_photo2.png" data-lightbox="group">
-            <img src="image/yoko_photo2.png" alt="VRChat Photo 5" width="300"> 
-        </a>
-        <a href="image/main_visual.png" data-lightbox="group">
-            <img src="image/main_visual.png" alt="VRChat Photo 6" width="300"> 
-        </a>
-        <a href="image/yoko_photo3.jpg" data-lightbox="group">
-            <img src="image/yoko_photo3.jpg" alt="VRChat Photo 6" width="300"> 
-        </a>
-        <a href="image/profile.jpg" data-lightbox="group">
-            <img src="image/profile.jpg" alt="VRChat Photo 6" width="300"> 
-        </a>
-        <a href="image/yoko_photo4.png" data-lightbox="group">
-            <img src="image/yoko_photo4.png" alt="VRChat Photo 6" width="300"> 
-        </a>
-       <a href="image/yoko_photo5.png" data-lightbox="group">
-            <img src="image/yoko_photo5.png" alt="VRChat Photo 6" width="300"> 
-        </a>
-       <a href="image/yoko_photo6.png" data-lightbox="group">
-            <img src="image/yoko_photo6.png" alt="VRChat Photo 6" width="300"> 
-        </a>
-        <a href="image/yoko_photo7.png" data-lightbox="group">
-            <img src="image/yoko_photo7.png" alt="VRChat Photo tate4" width="300">
-        </a>
-        <a href="image/yoko_photo8.png" data-lightbox="group">
-            <img src="image/yoko_photo8.png" alt="VRChat Photo tate4" width="300">
-        </a>
-        <a href="image/yoko_photo9.png" data-lightbox="group">
-            <img src="image/yoko_photo9.png" alt="VRChat Photo tate4" width="300">
-        </a>
-        <a href="image/yoko_photo10.png" data-lightbox="group">
-            <img src="image/yoko_photo10.png" alt="VRChat Photo tate4" width="300">
-        </a>
-        <a href="image/yoko_photo11.png" data-lightbox="group">
-            <img src="image/yoko_photo11.png" alt="VRChat Photo tate4" width="300">
-        </a>
-        <a href="image/yoko_photo12.png" data-lightbox="group">
-            <img src="image/yoko_photo12.png" alt="VRChat Photo tate4" width="300"> 
-        </a>
-        <a href="image/yoko_photo13.png" data-lightbox="group">
-            <img src="image/yoko_photo13.png" alt="VRChat Photo tate4" width="300">
-        </a>
-        <a href="image/yoko_photo14.png" data-lightbox="group">
-            <img src="image/yoko_photo14.png" alt="VRChat Photo tate4" width="300">
-        </a>
-        <a href="image/yoko_photo15.png" data-lightbox="group">
-            <img src="image/yoko_photo15.png" alt="VRChat Photo tate4" width="300">
-        </a>
-        <a href="image/yoko_photo16.png" data-lightbox="group">
-            <img src="image/yoko_photo16.png" alt="VRChat Photo tate4" width="300">
-        </a>
-    </div>
-  </section>
-</main>
-
- <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            lightGallery(document.getElementById('photo-gallery'));
-        });
+        lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': true,
+            'fadeDuration': 300
+        })
     </script>
-
 </body>
 </html>
