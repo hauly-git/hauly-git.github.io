@@ -1,347 +1,234 @@
-/* 全体の基本設定 */
+@charset "UTF-8";
+
+/* --- 共通スタイル (トップページと同じ) --- */
+:root {
+    --primary-color: #333;
+    --accent-color: #5d9cec;
+    --bg-color: #f9f9f9;
+    --text-color: #444;
+}
+
 body {
-  margin: 0;
-  padding: 0;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    line-height: 1.8;
 }
-/* ヘッダーの基本スタイル (PC向け) */
-.site-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(56, 56, 56, 0.4);
-    z-index: 10;
-    padding: 20px 0;
-    color: #fff;
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: 0.3s;
 }
-.header-content {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.title{
-    font-size: 20px;
-    font-weight: bold;
-    color: #ffffff;
-    text-shadow: 2px 2px 4px #000000;
-}
-nav ul {
+
+ul {
     list-style: none;
     padding: 0;
     margin: 0;
+}
+
+/* --- ヘッダー --- */
+.site-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 15px 40px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.header-content {
     display: flex;
-    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
 }
+
+.title span {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+nav ul {
+    display: flex;
+    gap: 30px;
+}
+
 nav a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.3s;
+    font-weight: 500;
+    font-size: 0.9rem;
 }
+
 nav a:hover {
-    color: #ddd;
+    color: var(--accent-color);
 }
 
-/* スマホ向けメディアクエリ */
-@media (max-width: 768px) {
-    /* ヘッダー */
-    .header-content {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding-top: 10px;
-    }
-    .title-left {
-        font-size: 30px; 
-    }
-    nav ul {
-        flex-direction: column;
-        align-items: center;
-        margin-top: 15px;
-        gap: 10px;
-    }
-    nav a {
-        font-size: 0.9rem;
-    }
+/* --- メインコンテンツ --- */
+.main-content {
+    padding-top: 80px; /* ヘッダーの高さ分空ける */
 }
 
+/* --- スライドショーエリアの調整 --- */
+.slideshow {
+    width: 100%;
+    height: 60vh; /* 高さ調整 */
+    position: relative;
+    overflow: hidden;
+    background: #000; /* 画像がない部分の背景 */
+    margin-bottom: 50px;
+}
 
+/* slideshow.js用の最低限のスタイル補完 */
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s;
+}
 
-body {
-  font: 14px/2 "Open sans", sans-serif;
-  letter-spacing: 0.05em;
+.slide.is-active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.image-container {
+    width: 100%;
+    height: 100%;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+}
+
+.slide-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    text-align: center;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.slide-content .title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    letter-spacing: 0.1em;
 }
 
 .btn {
-  display: inline-block;
-  padding: 13px 20px;
-  color: #fff;
-  text-decoration: none;
-  position: relative;
-  background: transparent;
-  border: 1px solid #e1e1e1;
-  font: 12px/1.2 "Oswald", sans-serif;
-  letter-spacing: 0.4em;
-  text-align: center;
-  text-indent: 2px;
-  text-transform: uppercase;
-  transition: color 0.1s linear 0.05s;
+    display: inline-block;
+    padding: 10px 30px;
+    border: 1px solid white;
+    color: white;
+    border-radius: 50px;
+    font-size: 0.9rem;
 }
-.btn::before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: #e1e1e1;
-  z-index: 1;
-  opacity: 0;
-  transition: height 0.2s ease, top 0.2s ease, opacity 0s linear 0.2s;
-}
-.btn::after {
-  transition: border 0.1s linear 0.05s;
-}
-.btn .btn-inner {
-  position: relative;
-  z-index: 2;
-}
+
 .btn:hover {
-  color: #373737;
-  transition: color 0.1s linear 0s;
-}
-.btn:hover::before {
-  top: 0;
-  height: 100%;
-  opacity: 1;
-  transition: height 0.2s ease, top 0.2s ease, opacity 0s linear 0s;
-}
-.btn:hover::after {
-  border-color: #373737;
-  transition: border 0.1s linear 0s;
+    background: white;
+    color: black;
 }
 
-.slideshow {
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  z-index: 1;
-}
-.slideshow .slideshow-inner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-.slideshow .slides {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-.slideshow .slide {
-  display: none;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.slideshow .slide.is-active {
-  display: block;
-}
-.slideshow .slide.is-loaded {
-  opacity: 1;
-}
-.slideshow .slide .caption {
-  padding: 0 100px;
-}
-.slideshow .slide .image-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-position: center;
-  z-index: 1;
-  background-size: cover;
-  image-rendering: optimizeQuality;
-}
-.slideshow .slide .image-container::before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-}
-.slideshow .slide .image {
-  width: 100%;
-  width: 100%;
-  object-fit: cover;
-  height: 100%;
-}
-.slideshow .slide-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  color: #fff;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.slideshow .slide .title {
-  margin: 0 auto 15px;
-  max-width: 1000px;
-  font: 300 50px/1.2 "Oswald", sans-serif;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-}
-.slideshow .slide .text {
-  margin: 0 auto;
-  max-width: 1000px;
-  font-size: 18px;
-  line-height: 1.4;
-}
-.slideshow .slide .btn {
-  margin: 15px 0 0;
-  border-color: #fff;
-}
-.slideshow .slide .btn::before {
-  background: #fff;
-}
-.slideshow .pagination {
-  position: absolute;
-  bottom: 35px;
-  left: 0;
-  width: 100%;
-  height: 12px;
-  cursor: default;
-  z-index: 2;
-  text-align: center;
-}
-.slideshow .pagination .item {
-  display: inline-block;
-  padding: 15px 5px;
-  position: relative;
-  width: 46px;
-  height: 32px;
-  cursor: pointer;
-  text-indent: -999em;
-  z-index: 1;
-}
-.slideshow .pagination .item + .page {
-  margin-left: -2px;
-}
-.slideshow .pagination .item::before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 15px;
-  left: 5px;
-  width: 36px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.5);
-  transition: background 0.2s ease;
-}
-.slideshow .pagination .item::after {
-  width: 0;
-  background: #fff;
-  z-index: 2;
-  transition: width 0.2s ease;
-}
-.slideshow .pagination .item:hover::before, .slideshow .pagination .item.is-active::before {
-  background-color: #fff;
-}
-.slideshow .arrows .arrow {
-  margin: -33px 0 0;
-  padding: 20px;
-  position: absolute;
-  top: 50%;
-  cursor: pointer;
-  z-index: 3;
-}
-.slideshow .arrows .prev {
-  left: 30px;
-}
-.slideshow .arrows .prev:hover .svg {
-  left: -10px;
-}
-.slideshow .arrows .next {
-  right: 30px;
-}
-.slideshow .arrows .next:hover .svg {
-  left: 10px;
-}
-.slideshow .arrows .svg {
-  position: relative;
-  left: 0;
-  width: 14px;
-  height: 26px;
-  fill: #fff;
-  transition: left 0.2s ease;
-}
-
-/* 写真全般の設定 */
-.photo-gallery-section {
+/* 矢印ナビゲーション */
+.arrows .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 10;
     padding: 20px;
-    margin-top: 10vh; /* スライドショーの高さ分の余白を追加 */
-    background-image: linear-gradient(180deg, #ffffff, #000000);;
-
+    fill: white;
 }
-/* フォトギャラリーのレイアウト */
-#photo-gallery {
+
+.arrows .prev {
+    left: 20px;
+}
+
+.arrows .next {
+    right: 20px;
+}
+
+/* --- ギャラリーセクション --- */
+.photo-gallery-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 100px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+h2 {
+    font-size: 1.5rem;
+    border-left: 5px solid var(--accent-color);
+    padding-left: 15px;
+    margin: 60px 0 30px;
+    color: var(--primary-color);
+}
+
+/* グリッドレイアウト */
+.gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 自動折り返し */
     gap: 15px;
 }
 
-/* 縦画像設定*/
-#photo-gallery img {
+/* 縦画像用の調整 */
+.gallery-grid.vertical {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.gallery-item {
+    display: block;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.gallery-item img {
     width: 100%;
-    height: auto;
-    cursor: pointer;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
+    height: 100%;
+    object-fit: cover; /* 枠に合わせてトリミング */
+    display: block;
+    transition: transform 0.4s ease;
 }
 
-/* 縦画像触る*/
-#photo-gallery img:hover {
+/* ホバー時のエフェクト */
+.gallery-item:hover img {
     transform: scale(1.05);
 }
 
-/* 横画像設定*/
-#photo-gallery-yoko img {
-    align-self: auto;
-    width: 45%;
-    float: auto;
-    height: auto;
-    cursor: pointer;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-    margin-right: 10px;
+.gallery-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.1);
+    opacity: 0;
+    transition: 0.3s;
 }
-/* 横画像触る*/
-#photo-gallery-yoko img:hover {
-    transform: scale(1.05);
+
+.gallery-item:hover::after {
+    opacity: 1;
 }

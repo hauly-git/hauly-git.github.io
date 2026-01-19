@@ -90,14 +90,43 @@ nav i {
 }
 
 /* --- メインビジュアル --- */
+/* --- メインビジュアル --- */
 .main-visual {
-    height: 60vh; /* 画面の60%の高さ */
-    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+    /* 画面いっぱいに表示したい場合は 100vh、少し小さくするなら 60vh */
+    height: 100vh; 
+    width: 100%;
+
+    /* 背景画像の設定（重要！） */
+    /* linear-gradient は写真を少し暗くして文字を読みやすくするためのフィルターです */
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('image/Titleimage.jpg');
+    
+    background-size: cover;   /* 画面全体を隙間なく埋める */
+    background-position: center; /* 画像の中心を表示 */
+    background-repeat: no-repeat;
+
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     margin-bottom: 60px;
+}
+
+/* もし文字が見えにくい場合は、文字の影を少し濃くします */
+.main-visual h1 {
+    color: white;
+    font-size: 3rem;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.5); /* 影を強化 */
+    letter-spacing: 0.2em;
+    margin: 0;
+    text-align: center; /* スマホで改行された時用に中央揃え */
+}
+
+/* スマホの時は文字サイズを調整 */
+@media (max-width: 768px) {
+    .main-visual h1 {
+        font-size: 2rem;
+        padding: 0 20px; /* 横幅いっぱいの時に文字が端に行き過ぎないように */
+    }
 }
 
 /* ※自分の画像を使いたい場合は以下のコメントアウトを外してパスを指定してください */
@@ -196,46 +225,110 @@ section h2 {
 }
 
 /* --- Boothセクション --- */
+/* --- Boothセクション --- */
 #booth-shop {
     text-align: center;
 }
 
-.booth-shop-to-link {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    font-weight: normal;
+.section-desc {
+    margin-bottom: 40px;
+    color: #666;
 }
 
-.booth-image {
-    max-width: 100%;
-    width: 400px;
-    border-radius: 15px;
+/* カード全体のスタイル */
+.booth-card {
+    display: block;
+    max-width: 600px; /* カードの最大幅 */
+    margin: 0 auto;   /* 中央寄せ */
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05); /* ふんわりした影 */
+    text-decoration: none;
+    transition: all 0.4s ease; /* アニメーションのなめらかさ */
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+/* ホバー時の動き（浮き上がる） */
+.booth-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(93, 156, 236, 0.2); /* 青っぽい影に変化 */
+    border-color: var(--accent-color);
+}
+
+/* カードの中身のレイアウト */
+.booth-card-inner {
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    gap: 30px;
+}
+
+/* 画像エリア */
+.booth-icon-area img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain; /* 画像の比率を崩さない */
+    border-radius: 15px; /* 角丸 */
+    background-color: #f0f0f0; /* 画像背景（透過画像の場合に有効） */
+    transition: transform 0.4s ease;
+}
+
+/* ホバー時に画像も少し動く */
+.booth-card:hover .booth-icon-area img {
+    transform: rotate(-5deg) scale(1.1);
+}
+
+/* テキストエリア */
+.booth-text-area {
+    text-align: left; /* 左揃え */
+    flex: 1; /* 残りの幅を全部使う */
+}
+
+.booth-text-area h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.4rem;
+    color: var(--primary-color);
+}
+
+.booth-text-area p {
+    margin: 0 0 15px 0;
+    font-size: 0.95rem;
+    color: #888;
+}
+
+/* 「ショップへ行く」の文字スタイル */
+.booth-link-text {
+    display: inline-block;
+    font-weight: bold;
+    color: var(--accent-color);
+    transition: 0.3s;
+}
+
+.booth-link-text i {
+    margin-left: 5px;
     transition: transform 0.3s;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-.booth-image:hover {
-    transform: scale(1.05);
+/* ホバー時に矢印が右に動く */
+.booth-card:hover .booth-link-text i {
+    transform: translateX(10px);
 }
 
-/* --- スマホ対応（レスポンシブ） --- */
-@media (max-width: 768px) {
-    .site-header {
-        padding: 15px 20px;
+/* スマホ対応 */
+@media (max-width: 600px) {
+    .booth-card-inner {
+        flex-direction: column; /* 縦並びにする */
+        text-align: center;
+        padding: 20px;
     }
-    .header-content {
-        flex-direction: column;
-        gap: 15px;
-    }
-    .about-container {
-        flex-direction: column;
+    
+    .booth-text-area {
         text-align: center;
     }
-    .main-visual h1 {
-        font-size: 2rem;
-    }
-    .profile-image {
-        width: 150px;
-        height: 150px;
+    
+    .booth-icon-area img {
+        width: 80px;
+        height: 80px;
     }
 }
