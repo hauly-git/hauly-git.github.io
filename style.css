@@ -185,9 +185,30 @@ section h2 {
 .profile-image {
     width: 200px;
     height: 200px;
+    
+    /* 画像をトリミングして比率を保つ（歪み防止の絶対条件） */
     object-fit: cover;
+    
+    /* 正円にする */
     border-radius: 50%;
+    
+    /* 影 */
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    
+    /* 【ここが重要】親要素が狭くなっても、絶対に縮まないようにする設定 */
+    flex-shrink: 0;
+}
+
+/* スマホ用設定 */
+@media (max-width: 768px) {
+    .profile-image {
+        /* スマホでは少し小さくするが、正円はキープ */
+        width: 150px;
+        height: 150px;
+        
+        /* 念のためここでも強調 */
+        flex-shrink: 0;
+    }
 }
 
 .about-text .sentence span {
