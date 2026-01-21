@@ -413,3 +413,35 @@ section h2 {
         font-size: 1.5rem; /* 文字を大きく */
     }
 }
+
+/* --- 1. スクロール時の「ふわっ」とアニメーション --- */
+.js-scroll-trigger {
+    opacity: 0;
+    transform: translateY(30px); /* 最初は少し下にいる */
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); /* 動きをなめらかに */
+}
+
+.js-scroll-trigger.is-active {
+    opacity: 1;
+    transform: translateY(0); /* 元の位置に戻る */
+}
+
+/* --- 2. メインビジュアルのタイトルアニメーション --- */
+.main-visual h1 {
+    /* 既存のスタイルがあれば維持しつつ、以下を追加/上書き */
+    animation: textBlurIn 2s ease forwards;
+    opacity: 0; /* 最初は隠す */
+}
+
+@keyframes textBlurIn {
+    0% {
+        filter: blur(20px);
+        transform: scale(1.2);
+        opacity: 0;
+    }
+    100% {
+        filter: blur(0);
+        transform: scale(1);
+        opacity: 1;
+    }
+}
