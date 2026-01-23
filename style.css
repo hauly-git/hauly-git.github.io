@@ -445,3 +445,88 @@ section h2 {
         opacity: 1;
     }
 }
+/* --- スマホ表示のレイアウト修正 --- */
+@media (max-width: 768px) {
+    .about-container {
+        /* 縦並びにする（これで文字が広くなります） */
+        flex-direction: column;
+        /* 文字を中央揃えにする */
+        text-align: center;
+        /* 画像と文字の間隔を少し狭く調整 */
+        gap: 20px;
+    }
+    
+    /* 念のため、文章の幅を100%にする */
+    .about-text {
+        width: 100%;
+    }
+}
+/* --- Booth商品スライドショー --- */
+.booth-slider-area {
+    width: 100%;
+    overflow: hidden; /* はみ出した部分を隠す */
+    padding: 20px 0;
+    margin-top: 30px;
+    background: #fff; /* 背景色 */
+}
+
+.booth-track {
+    display: flex;
+    width: fit-content; /* 中身に合わせて幅を自動調整 */
+    gap: 20px; /* 画像と画像の間隔 */
+    
+    /* アニメーション設定 */
+    animation: scrollLoop 30s linear infinite; 
+}
+
+/* 商品画像のスタイル */
+.booth-item {
+    width: 150px; /* 画像の幅 */
+    height: 150px;
+    flex-shrink: 0; /* 縮まないようにする */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.booth-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ホバー時に少し拡大 */
+.booth-item:hover {
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+/* マウスを乗せたらスライドを一時停止 */
+.booth-track:hover {
+    animation-play-state: paused;
+}
+
+/* 左へ流れるアニメーション */
+@keyframes scrollLoop {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        /* リストの半分（1セット分）移動したら瞬時に0に戻る */
+        /* widthが可変なので、JSで計算するか、CSSで -50% に設定 */
+        transform: translateX(-50%); 
+    }
+}
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+    .booth-item {
+        width: 100px; /* スマホでは少し小さく */
+        height: 100px;
+    }
+    .booth-track {
+        gap: 15px;
+        animation-duration: 20s; /* スマホは少し速くてもいいかも */
+    }
+}
